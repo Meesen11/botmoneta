@@ -6,7 +6,7 @@ bot = telebot.TeleBot('6392514625:AAFymeOXq450T04_m-prC-D5VYTQA2dBNGE')
 @bot.message_handler(commands=['start'])
 def main(message):
     user_id = message.from_user.id
-    chat_id = 'ID Бота'
+    chat_id = '-1002084767114'
     member = bot.get_chat_member(chat_id, user_id)  
 
     markup = types.InlineKeyboardMarkup()
@@ -15,7 +15,7 @@ def main(message):
     else:
         bot.send_message(message.chat.id, 'Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=markup)
         markup.add(types.InlineKeyboardButton('Join QWETON', url='https://t.me/+OsklCmoqvCRkOWJi'))
-        bot.send_message(message.chat.id, 'Подпишитесь на наш канал:', reply_markup=markup)
+            
 
 bot.polling(none_stop=True)
 
