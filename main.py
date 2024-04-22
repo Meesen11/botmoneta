@@ -1,47 +1,50 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.utils import executor
 
-bot = telebot.TeleBot('6392514625:AAFymeOXq450T04_m-prC-D5VYTQA2dBNGE')
+API_TOKEN = '6392514625:AAFymeOXq450T04_m-prC-D5VYTQA2dBNGE'
+
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+dp.middleware.setup(LoggingMiddleware())
 
 balans = 0
 ref = 0
 crypto_wallet = []
-referral_links = {}
 
-@bot.message_handler(commands=['start'])
-def start(message):
+
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
     user_id = message.from_user.id
     chat_id = '-1002084767114'
-    member = bot.get_chat_member(chat_id, user_id)  
+    member = await bot.get_chat_member(chat_id, user_id)
 
-    if member.status == 'member' or member.status == 'creator':
-        reply_markup = types.ReplyKeyboardMarkup()
-
-        btn1 = types.KeyboardButton(r'Профиль')
-        btn2 = types.KeyboardButton(r'Криптокошелек')
-        btn3 = types.KeyboardButton(r'Реферальная система')
-
-        reply_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        reply_markup.add(btn1, btn2)
-        reply_markup.add(btn3)
+    if member.status in ['member', 'creator']:
+        keyboard_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1 = types.KeyboardButton('Профиль')
+        btn2 = types.KeyboardButton('Криптокошелек')
+        btn3 = types.KeyboardButton('Реферальная система')
+        keyboard_markup.add(btn1, btn2)
+        keyboard_markup.add(btn3)
 
         inline_markup = types.InlineKeyboardMarkup()
-        inline_markup.add(types.InlineKeyboardButton('Реферал', callback_data='invite')) 
-        bot.send_message(message.chat.id, 'AIRDROP QWETON COIN 🧸 Мы платим целых 250 $QWT за одного приведенного друга Это самые лучшие условия для AIRDROP !', reply_markup=inline_markup)
-    
-    if member.status != 'member' and member.status != 'creator':
+        inline_markup.add(types.InlineKeyboardButton('Реферал', callback_data='invite'))
+
+        await message.answer('Привет! Добро пожаловать!', reply_markup=keyboard_markup)
+    else:
         inline_markup = types.InlineKeyboardMarkup()
         inline_markup.add(types.InlineKeyboardButton('Join QWETON', url='https://t.me/+OsklCmoqvCRkOWJi'))
-        bot.send_message(message.chat.id, 'Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=inline_markup)
+        await message.answer('Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=inline_markup)
 
-
-
-
-
-
-@bot.message_handler(content_types=['text'])
-def profil(message):
+@dp.message_handler()
+async def profil(message: types.Message):
     if message.text.lower() == 'профиль':
-        bot.send_message(message.chat.id, f'Информация профиля: \n Баланc: {balans} $QWT \n Количество рефералов: {ref}')      
+        await message.answer(f'Информация профиля: \n Баланс: {balans} $QWT \n Количество рефералов: {ref}')
 
-bot.polling()
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    executor.start_polling(dp, skip_updates=True)
+
+
+#6392514625:AAFymeOXq450T04_m-prC-D5VYTQA2dBNGE
