@@ -14,28 +14,57 @@ ref = 0
 crypto_wallet = []
 
 
+
+
+
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     user_id = message.from_user.id
     chat_id = '-1002084767114'
-    member = await bot.get_chat_member(chat_id, user_id)
+    try:
+        member = await bot.get_chat_member(chat_id, user_id)
+        if member.status in ['member', 'creator']:
+            keyboard_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            btn1 = types.KeyboardButton('Профиль')
+            btn2 = types.KeyboardButton('Криптокошелек')
+            btn3 = types.KeyboardButton('Реферальная система')
+            keyboard_markup.add(btn1, btn2)
+            keyboard_markup.add(btn3)
 
-    if member.status in ['member', 'creator']:
-        keyboard_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn1 = types.KeyboardButton('Профиль')
-        btn2 = types.KeyboardButton('Криптокошелек')
-        btn3 = types.KeyboardButton('Реферальная система')
-        keyboard_markup.add(btn1, btn2)
-        keyboard_markup.add(btn3)
+            inline_markup = types.InlineKeyboardMarkup()
+            inline_markup.add(types.InlineKeyboardButton('Реферал', callback_data='invite'))
 
-        inline_markup = types.InlineKeyboardMarkup()
-        inline_markup.add(types.InlineKeyboardButton('Реферал', callback_data='invite'))
+            await message.answer('Привет! Добро пожаловать!', reply_markup=keyboard_markup)
+        else:
+            inline_markup = types.InlineKeyboardMarkup()
+            inline_markup.add(types.InlineKeyboardButton('Join QWETON', url='https://t.me/+OsklCmoqvCRkOWJi'))
+            await message.answer('Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=inline_markup)
+    
 
-        await message.answer('Привет! Добро пожаловать!', reply_markup=keyboard_markup)
-    else:
-        inline_markup = types.InlineKeyboardMarkup()
-        inline_markup.add(types.InlineKeyboardButton('Join QWETON', url='https://t.me/+OsklCmoqvCRkOWJi'))
-        await message.answer('Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=inline_markup)
+
+# @dp.message_handler(commands=['start'])
+# async def start(message: types.Message):
+#     user_id = message.from_user.id
+#     chat_id = '-1002084767114'
+#     member = await bot.get_chat_member(chat_id, user_id)
+
+#     if member.status in ['member', 'creator']:
+#         keyboard_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+#         btn1 = types.KeyboardButton('Профиль')
+#         btn2 = types.KeyboardButton('Криптокошелек')
+#         btn3 = types.KeyboardButton('Реферальная система')
+#         keyboard_markup.add(btn1, btn2)
+#         keyboard_markup.add(btn3)
+
+#         inline_markup = types.InlineKeyboardMarkup()
+#         inline_markup.add(types.InlineKeyboardButton('Реферал', callback_data='invite'))
+
+#         await message.answer('Привет! Добро пожаловать!', reply_markup=keyboard_markup)
+#     else:
+#         inline_markup = types.InlineKeyboardMarkup()
+#         inline_markup.add(types.InlineKeyboardButton('Join QWETON', url='https://t.me/+OsklCmoqvCRkOWJi'))
+#         await message.answer('Чтобы участвовать в AIRDROP, Вам необходимо сначала подписаться на следующие каналы 👇', reply_markup=inline_markup)
 
 @dp.message_handler()
 async def profil(message: types.Message):
