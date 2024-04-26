@@ -24,6 +24,6 @@ async def profile_handler(msg: Message):
         DB = 'User_Info.db'
         user_info = await get_user_by_id(DB, user_id)
         if user_info:
-            await msg.answer(f'Информация:\n\nВаш айди: {user_info[1]}\nБаланс: {user_info[2]}\nРефералов: {user_id[3]}\nКошелёк: {user_info[4]}')
+            await msg.answer(f'Информация:\n\nВаш айди: {user_info[1]}\nБаланс: {user_info[2]}\nРефералов: {user_info[3]}\nКошелёк: {user_info[4]}')
         else:
             pass

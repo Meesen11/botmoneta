@@ -73,17 +73,14 @@ async def start_cmd(msg: Message, bot: Bot):
     else:
         member = await bot.get_chat_member(chat_id, user_id)
         if member.status in ['member', 'creator']:
-            keyboard_markup = ReplyKeyboardMarkup(resize_keyboard=True)
-            btn1 = KeyboardButton('Профиль')
-            btn2 = KeyboardButton('Криптокошелек')
-            btn3 = KeyboardButton('Реферальная система')
-            keyboard_markup.add(btn1, btn2)
-            keyboard_markup.add(btn3)
+            kb = [
+                [KeyboardButton(text="Профиль")], 
+                [KeyboardButton(text="Криптокошелек")],
+                [KeyboardButton(text="'Реферальная система ")]
+            ]
+            keyboard = ReplyKeyboardMarkup(keyboard=kb)
 
-            inline_markup = InlineKeyboardMarkup()
-            inline_markup.add(InlineKeyboardButton('Реферал', callback_data='invite'))
-
-            await msg.answer('Привет! Добро пожаловать!', reply_markup=keyboard_markup)
+            await msg.answer('Привет! Добро пожаловать!', reply_markup=keyboard)
         else:
             builder = InlineKeyboardBuilder()
             builder.add(InlineKeyboardButton(
